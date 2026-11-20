@@ -1,0 +1,163 @@
+{
+  "taxonomy_version": "1.0",
+  "rule": "Add codes when needed. Never rename or reuse a code: old releases must stay comparable.",
+  "categories": [
+    {
+      "code": "REQ",
+      "label": "Requirements incomplete or ambiguous",
+      "definition": "The requirement or acceptance criteria did not state, or stated unclearly, the behaviour UAT expected."
+    },
+    {
+      "code": "TEST",
+      "label": "Test coverage gap",
+      "definition": "The requirement was clear and the build was wrong; no developer-side test exercised the failing path."
+    },
+    {
+      "code": "ENV",
+      "label": "Environment or configuration",
+      "definition": "Works as built, fails because of environment, deployment or configuration differences."
+    },
+    {
+      "code": "INT",
+      "label": "Integration or interface",
+      "definition": "A contract, payload, sequence or timing problem between two systems or modules."
+    },
+    {
+      "code": "DATA",
+      "label": "Data validation",
+      "definition": "Missing or wrong validation, defaulting or handling of data values."
+    },
+    {
+      "code": "UI",
+      "label": "UI or UX",
+      "definition": "Layout, labels, navigation or interaction is wrong while the underlying logic is right."
+    },
+    {
+      "code": "PERF",
+      "label": "Performance",
+      "definition": "Correct result, unacceptable time or resource use."
+    },
+    {
+      "code": "SEC",
+      "label": "Security",
+      "definition": "Access, permission or data-exposure defect."
+    },
+    {
+      "code": "REG",
+      "label": "Regression from a previous fix",
+      "definition": "Previously working behaviour broken by a later change. Needs evidence of the earlier working state."
+    },
+    {
+      "code": "PROC",
+      "label": "Process or workflow",
+      "definition": "The software matches its design; the delivery or business process around it caused the bug report."
+    },
+    {
+      "code": "OTHER",
+      "label": "Other",
+      "definition": "None of the above. Say why in root_cause."
+    }
+  ],
+  "escape_reasons": [
+    {
+      "code": "test-data",
+      "definition": "Developer data did not include the case UAT used."
+    },
+    {
+      "code": "environment",
+      "definition": "The local or dev environment differs from UAT in a way that hid the defect."
+    },
+    {
+      "code": "integration-unavailable",
+      "definition": "The other system was mocked, stubbed or absent before UAT."
+    },
+    {
+      "code": "ac-interpretation",
+      "definition": "Developer and tester read the acceptance criteria differently."
+    },
+    {
+      "code": "missing-test",
+      "definition": "The path could have been tested locally and no test existed."
+    },
+    {
+      "code": "test-not-run",
+      "definition": "A test existed and was skipped, disabled or not run for this change."
+    },
+    {
+      "code": "unknown",
+      "definition": "Not established."
+    }
+  ],
+  "catch_levels": [
+    {
+      "code": "unit",
+      "definition": "An in-process unit test could have caught it."
+    },
+    {
+      "code": "api",
+      "definition": "An API or contract test against a running service could have caught it."
+    },
+    {
+      "code": "integration",
+      "definition": "A test with the real or simulated neighbouring system could have caught it."
+    },
+    {
+      "code": "e2e-ui",
+      "definition": "An automated end-to-end UI test could have caught it."
+    },
+    {
+      "code": "manual",
+      "definition": "Only a manual check before UAT could have caught it."
+    },
+    {
+      "code": "uat-only",
+      "definition": "Realistically visible only in UAT: business judgment or production-like data."
+    },
+    {
+      "code": "unknown",
+      "definition": "Not established."
+    }
+  ],
+  "ac_issues": [
+    "none",
+    "missing",
+    "ambiguous",
+    "conflicting",
+    "misread",
+    "unknown"
+  ],
+  "layers": [
+    "ui",
+    "api",
+    "rules",
+    "data",
+    "integration",
+    "batch",
+    "config",
+    "security",
+    "unknown"
+  ],
+  "severities": [
+    "critical",
+    "high",
+    "medium",
+    "low",
+    "unknown"
+  ],
+  "root_cause_statuses": [
+    "Confirmed",
+    "Suspected",
+    "Unconfirmed"
+  ],
+  "origins": [
+    "human",
+    "agent-assisted",
+    "mixed",
+    "unknown"
+  ],
+  "depths": [
+    "quick",
+    "standard",
+    "full"
+  ]
+}

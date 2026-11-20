@@ -1,0 +1,84 @@
+# config/uat-profile.yaml
+#
+# The answers the uat agent would otherwise have to ask for on every run.
+# The agent reads this file first, in every run mode, including headless runs
+# where nobody is present to answer a question.
+#
+# Lines marked CONFIRM are placeholders or assumptions. A person on the team
+# must check them. Until then the agent lists them as limitations.
+
+profile_version: 1
+
+# Stack profiles to load, as skills named uat-stack-<name>.
+# Add a name here after you add a profile for another application.
+stack_profiles: [guidewire]
+
+# The agent file talks about ROLES, never tool names. This block maps each role
+# to what is installed today. Replacing a plugin is a one-line change here.
+roles:
+  issue_tracker:       { prefer: jira-transport-plugin, kind: jira }
+  code_host:           { prefer: bitbucket-pr, kind: bitbucket }
+  test_management:     { prefer: test-plan-writing, kind: workbook }    # CONFIRM
+  spreadsheet_builder: { prefer: xlsx }
+  brand_style:         { prefer: brand-guidelines, brand_name: ACE }
+
+release:
+  key: fixVersion                 # Jira Fix Version
+  closed_when: "The Fix Version is marked Released in Jira"            # CONFIRM
+
+uat_bug_filter:
+  # CONFIRM: the query that returns UAT bugs and nothing else. While this still
+  # starts with REPLACE, the agent reports "UAT bug filter not configured" as a
+  # limitation and analyzes only the bug keys it is given.
+  jql: 'REPLACE: for example  issuetype = Bug AND "Found In" = UAT AND fixVersion = "{release}"'
+
+# verbatim: keep source values such as policy numbers exactly as written.
+# masked:   store only the last four characters of customer identifiers.
+# Chosen: verbatim. That choice assumes UAT data is synthetic. Switch to masked
+# the day real customer data can appear in UAT, because the ledger lives in git.
+identifiers: verbatim
+
+# true only if every repository keeps Claude Code's commit and pull-request
+# attribution switched on. Only then can "no trailer" be read as "human".
+attribution_enforced: false                                             # CONFIRM
+
+exposure:
+  # Measures of release size the agent collects into ledger/releases.csv.
+  candidates: [stories, story_points, merged_prs, uat_test_executions]
+  # Measures it may use to turn counts into rates and to size a forecast.
+  # Empty for now: none is reliable yet. Move a measure here once it is filled
+  # in for every closed release and someone has checked the numbers.
+  trusted: []
+
+depth_default: standard
+
+outputs:
+  quick:    [chat]
+  standard: [json_csv, markdown, excel]
+  full:     [json_csv, markdown, excel_dashboard, html]
+
+forecast:
+  # Operating guardrails, not statistical constants. Raise them if forecasts
+  # prove unreliable; do not lower them to get a number sooner.
+  min_releases_indicative: 3
+  min_releases_model: 6
+  min_skill: 0.10
+
+acceptance:
+  # Targets the backtest must meet before the team relies on the agent
+  # (README, "Backtest it before you rely on it"). The acceptance command
+  # checks them and prints pass, fail or incomplete.
+  min_bugs: 20                  # with fewer, a 95% target allows no miss at all
+  min_category_match: 0.95      # share of bugs where the category matches the team's call
+  max_confirmed_wrong: 0        # causes marked Confirmed that proved wrong
+  # Also checked: unclear causes kept at Suspected or Unconfirmed, at least as
+  # often as the original prompt did on the same bugs.
+
+writeback:
+  mode: propose-approve-apply
+  allowed: [add_labels, add_comment, create_ticket]
+  # CONFIRM: your tracker plugin's create, update and comment tools are listed
+  # under disallowedTools in agent-src/uat.agent.md (README, Install, step 6).
+  # Until they are, "the agent only proposes" is a rule in the prompt, not a
+  # block. Set this to true once that is done.
+  tracker_writes_denied: false

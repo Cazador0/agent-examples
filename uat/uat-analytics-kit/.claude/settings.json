@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 .claude/skills/uat-ledger/scripts/uat_ledger.py *)",
+      "Bash(python3 tools/build_agent.py *)"
+    ]
+  }
+}
